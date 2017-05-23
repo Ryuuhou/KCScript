@@ -1,4 +1,4 @@
-﻿;AHKCSortie v1.61121
+;AHKCSortie v1.61121
 
 #Persistent
 #SingleInstance
@@ -178,7 +178,7 @@ Sortie:
 	Notify("AHKCSortie", "Preparing to send sortie",1)
 	if not (BP = 1 and DisableCriticalCheck = 1)
 	{
-		if not (World = 1 and Map = 1 and Sparkling = 1)
+		if not (world = 1 and map = 1)
 		{
 			Repair()
 		}
@@ -207,12 +207,15 @@ Sortie:
 	pc := [S2PC]
 	WaitForPixelColor(FX,FY,pc)
 	tf := SPGx[World]
+	Sleep MiscDelay
 	ClickS(tf,PGy)
 	GuiControl,, NB, Starting sortie
 	Sleep MiscDelay
 	if(Map > 4)
 	{
-		ClickS(Extrax,Extray)
+		pc := []
+		pc := [PG2SPC]
+		tpc := WaitForPixelColor(PGExtrax,PGExtray,pc,Extrax,Extray)
 	}
 	tfx := MAPx[Map]
 	tfy := MAPy[Map]
@@ -241,7 +244,30 @@ Sortie:
 			ClickS(ESx,ESy)
 			GuiControl,, NB, Waiting for formation
 			pc := []
-			pc := [FPC,IBPC]
+			pc := [FPC,CPC,IBPC]
+			tpc2 := WaitForPixelColor(LAx,LAy,pc)
+			if tpc2 = 1
+			{
+				Sleep MiscDelay
+				if(World = 1 and Map = 5)
+				{
+					ClickS(LAbreastx,LAbreasty)
+				}
+				else if(world = 3 and map = 2)
+				{
+					ClickS(L_doublex,L_doubley)
+				}
+				else 
+				{
+					ClickS(LAx,LAy)
+				}
+			}
+			if tpc2 = 2
+			{
+			ClickS(ESx,ESy)
+			GuiControl,, NB, Waiting for formation
+			pc := []
+			pc := [FPC,CPC,IBPC]
 			tpc2 := WaitForPixelColor(LAx,LAy,pc)
 			if tpc2 = 1
 			{
@@ -255,6 +281,7 @@ Sortie:
 					ClickS(LAx,LAy)
 				}
 			}
+			} 
 		}
 		else if tpc = 2 
 		{
@@ -278,16 +305,62 @@ Sortie:
 			GuiControl,, NB, Cancelling night battle
 			Sleep 3000
 			ClickS(CNBx,CNBy)
+			Sleep 3000
+			GuiControl,, NB, Found Score
+			sleep 6000
+			ClickS(FX,FY)
+			GuiControl,, NB, Waiting for health screen
+			sleep 1500
+			GuiControl,, NB, Checking HP
+			sleep 1500
+			loop, 6
+			{
+				GuiControl,, NB, Checking HP %A_Index%
+				tpc5 := PixelGetColorS(ShipHealthx,ShipHealthy%A_Index%,3)
+				if (tpc5 = RedHealthPC)
+				{
+					GuiControl,, NB, RED detected
+					if (world !=1 and map != 1)
+					{
+						NC := Nodes
+					}
+				}
+			}
+		}
+		else if tpc != 2
+		{
+			GuiControl,, NB, Found Score
+			sleep 3000
+			ClickS(FX,FY)
+			GuiControl,, NB, Waiting for health screen
+			sleep 1500
+			GuiControl,, NB, Checking HP
+			sleep 1500
+			loop, 6
+			{
+				GuiControl,, NB, Checking HP %A_Index%
+				tpc5 := PixelGetColorS(ShipHealthx,ShipHealthy%A_Index%,3)
+				if (tpc5 = RedHealthPC)
+				{
+					GuiControl,, NB, RED detected
+					if (world !=1 and map != 1)
+					{
+						NC := Nodes
+					}
+				}
+			}
 		}
 		GuiControl,, NB, Waiting...
+		sleep 5000
+		GuiControl,, NB, Checking next screen...
 		pc := []
-		pc := [HPC,HEPC,CSPC]
+		pc := [HPC,HPC,HPC,HPC,HEPC,HEPC,HEPC,CSPC]
 		tpc := WaitForPixelColor(FX,FY,pc,FX,FY)
-		if tpc = 1 or tpc = 2
+		if tpc != 8
 		{
 			Break
 		}
-		else if tpc = 3
+		else if tpc = 8
 		{
 			GuiControl,, NB, Continue screen
 			Sleep 2000
@@ -303,8 +376,26 @@ Sortie:
 				ClickS(CSBx,CSBy)
 			}
 		}
+		else if tpc = 9
+		{
+			ClickS(ESBx,ESBy)
+			Sleep 2000
+			Break
+		}
+
+		else
+		{
+			break
+		}
 		NC += 1
 	}Until NC > Nodes
+	if (tpc6 = ResourceSortiePC)
+	{
+		GuiControl,, NB, Resource screen
+		ClickS(ESBx,ESBy)
+		Sleep 3000
+
+	}
 	GuiControl,, NB, Waiting for home screen
 	pc := []
 	pc := [HPC,HEPC]
@@ -329,7 +420,43 @@ Resupply(r)
 	tpc := PixelGetColorS(FX,FY,3)
 	if (tpc = HPC)
 	{
-        ClickS(Rx,Ry)
+        loop
+		{
+        Random, random_screen , 1, 5
+        Goto, %random_screen%
+		1:
+		GuiControl,, NB, 1
+		ClickS(Rx,Ry)
+		break
+		2:
+		GuiControl,, NB, 2
+		ClickS(Refitx,Refity)
+		pc := []
+		pc := [RPC]
+		WaitForPixelColor(FX,FY,pc,SResupplyx,SResupplyy)
+		break
+		3:
+		GuiControl,, NB, 3
+		ClickS(Factoryx,Factoryy)
+		pc := []
+		pc := [RPC]
+		WaitForPixelColor(FX,FY,pc,SResupplyx,SResupplyy)
+		break
+		4:
+		GuiControl,, NB, 4
+		ClickS(Repairx,Repairy)
+		pc := []
+		pc := [RPC]
+		WaitForPixelColor(FX,FY,pc,SResupplyx,SResupplyy)
+		break
+		5:
+		GuiControl,, NB, 5
+		ClickS(Fleetx,Fleety)
+		pc := []
+		pc := [RPC]
+		WaitForPixelColor(FX,FY,pc,SResupplyx,SResupplyy)
+		break
+		}
 	}
 	else if (tpc != RPC) 
     {
@@ -346,7 +473,7 @@ Resupply(r)
     Sleep MiscDelay
 	rti := 0
 	rti2 := 5
-	if (World = 1 and Map = 1 and Sparkling = 1)
+	if (world = 1 and map = 1)
 	{
 		rti2 := 0
 	}
@@ -371,7 +498,7 @@ WorldF:
 		StringReplace, WorldV, WorldV, `n,,All
 		GuiControl,, WorldV, %WorldV%
 		Send, {end}
-		if (WorldV=1 or WorldV=3 or WorldV=5)
+		if (WorldV=1 or WorldV=2 or WorldV=3 or WorldV=5)
 		{
 			World := WorldV
 			GuiControl,, NB, World set
@@ -393,7 +520,7 @@ MapF:
 		StringReplace, MapV, MapV, `n,,All
 		GuiControl,, MapV, %MapV%
 		Send, {end}
-		if (MapV=1 or MapV=2 or MapV=4 or MapV=5)
+		if (MapV=1 or MapV=2 or MapV=3 or MapV=4 or MapV=5)
 		{
 			Map := MapV
 			GuiControl,, NB, Map # set
@@ -415,13 +542,9 @@ NodeCount:
 		StringReplace, NodeCount, NodeCount, `n,,All
 		GuiControl,, NodeCount, %NodeCount%
 		Send, {end}
-		if (NodeCount > 0 and NodeCount < 4)
+		if (NodeCount > 0 and NodeCount < 5)
 		{
 			Nodes := NodeCount
-			if Nodes > 1
-			{
-				MsgBox WARNING: Script will continue past first node and will NOT check for critical damage. You risk sinking any girl that is not flagship.
-			}
 			GuiControl,, NB, # of nodes set
 		}
 		else
@@ -558,7 +681,7 @@ Initialize()
 	pc := Array(item)
     Q := Array()
 	NC := 0
-	ClickDelay := 500
+	ClickDelay := 50
 	coffset := 7
 }
 

@@ -36,7 +36,7 @@ PixelGetColorS(x,y,z := 0)
 	}Until i > z
 	return lHEX
 }
-
+;(check xy,what color you want,click here until color)
 WaitForPixelColor(x, y, pc, cx := -1, cy := -1, timeout := 60)
 {
 	global uid

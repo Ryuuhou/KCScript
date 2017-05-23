@@ -1,4 +1,4 @@
-﻿;Pixel Color Constants v1.61124
+;Pixel Color Constants v1.61124
 
 HPC := 0x4acacd ;Home
 HEPC := 0x42b6b8 ;Home + Exped
@@ -26,3 +26,8 @@ CSPC := 0x162629 ;Continue Screen
 CCPC := 0xcc5852 ;Critical
 IBPC := 0x3a87b3 ;In Battle
 EX2PC := 0x23A0A1 ; Expedition 2 highlighted 
+EX3PC := 0x53ADAD ; Expedition 3 highlighted 
+EX4PC := 0x77B9B9 ; Expedition 4 highlighted 
+PG2SPC := 0xFF9696 ; page 2 sortie
+RedHealthPC := 0x6A2C28
+ResourceSortiePC := 0x000408

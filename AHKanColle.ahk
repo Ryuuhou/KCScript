@@ -1,4 +1,4 @@
-﻿;AHKanColle v1.61124
+;AHKanColle v1.61124
 
 if not A_IsAdmin
 {
@@ -295,11 +295,15 @@ Resupply(r)
 	}
     else if r = 3
 	{
-        ClickS(3Rx,234Ry)
+		pc := []
+		pc := [EX3PC]
+		WaitForPixelColor(3Rx,234Ry,pc,3Rx,234Ry)
 	}
     else if r = 4
 	{
-        ClickS(4Rx,234Ry)
+		pc := []
+		pc := [EX4PC]
+		WaitForPixelColor(4Rx,234Ry,pc,4Rx,234Ry)
 	}
 	Sleep MiscDelay
 	rti := 0
@@ -818,7 +822,7 @@ Initialize()
 	CDT[4] := 0
     RF := 0
 	IB := 0
-	ClickDelay := 500
+	ClickDelay := 50
 	coffset := 7
 	#Include %A_ScriptDir%/Constants/ExpeditionTime.ahk
 }
